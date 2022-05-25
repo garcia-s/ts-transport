@@ -1,9 +1,11 @@
 import { ITransportClient, ITransportServer } from "./interface";
 import { WebSocket, WebSocketServer } from "ws";
 import { v4 as uuid } from "uuid";
+import { Server as HTTPServer } from "http";
 
 type TrasportServerOptions = {
-  port: number;
+  port?: number;
+  server?: HTTPServer;
   callback?: () => void;
 };
 
@@ -19,6 +21,13 @@ export class TransportServer implements ITransportServer {
   private _clients: TransportSocketClient[] = [];
 
   constructor(options: TrasportServerOptions) {
+    
+    if (!options.port && !options.server)
+      throw new Error("Yo should specify either a server or a port");
+
+    if (options.port && options.server)
+      throw new Error("You can either specify a server or a port, not both");
+
     this._server = new WebSocketServer(
       { port: options.port },
       options.callback
