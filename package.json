@@ -1,12 +1,13 @@
 {
   "name": "ts-transport",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Transport for my real-time applications",
   "main": "index.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "build": "tsc",
     "test": "npx ts-node ./test/test.ts"
   },
   "repository": {
@@ -28,6 +29,7 @@
     "ws": "^8.6.0"
   },
   "devDependencies": {
+    "typescript": "^4.7.2",
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3"
   }
