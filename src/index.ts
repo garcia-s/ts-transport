@@ -1,15 +1,11 @@
 import { ITransportClient, ITransportServer } from "./interface";
-import { WebSocket, WebSocketServer } from "ws";
+import { ServerOptions, WebSocket, WebSocketServer } from "ws";
 import { v4 as uuid } from "uuid";
 import { Server as HTTPServer } from "http";
+import { Server as HTTPSServer } from "https";
 import { URL } from "url";
-type TrasportServerOptions = {
-  port?: number;
-  server?: HTTPServer;
-  path?: string;
-  callback?: () => void;
-};
 
+interface TransportServerOptions extends ServerOptions {}
 type TransportListener = {
   event: string;
   once?: boolean;
@@ -21,17 +17,8 @@ export class TransportServer implements ITransportServer {
   private _connectListener?: (ws: TransportSocketClient) => void;
   private _clients: TransportSocketClient[] = [];
 
-  constructor(options: TrasportServerOptions) {
-    if (!options.port && !options.server)
-      throw new Error("Yo should specify either a server or a port");
-
-    if (options.port && options.server)
-      throw new Error("You can either specify a server or a port, not both");
-
-    this._server = new WebSocketServer(
-      { port: options.port },
-      options.callback
-    );
+  constructor(options: TransportServerOptions) {
+    this._server = new WebSocketServer(options);
     // Register connection listener
     this._server.on("connection", (ws: WebSocket) => {
       const client = new TransportSocketClient(ws, this);
@@ -39,15 +26,6 @@ export class TransportServer implements ITransportServer {
       if (this._connectListener) this._connectListener(client);
     });
     //handle upgrades from the server
-    if (options.server && options.path)
-      options.server.on("upgrade", (request, socket, head) => {
-        const pathname = request.url ? new URL(request.url!).pathname : "/";
-        if (options.path !== pathname) return socket.destroy();
-
-        this._server.handleUpgrade(request, socket, head, (ws) => {
-          this._server.emit("connection", ws, request);
-        });
-      });
   }
 
   get clients() {
