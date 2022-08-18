@@ -67,17 +67,18 @@ export class TransportSocketClient implements ITransportClient {
       this._server.removeClient(this);
       if (this._closeListener) this._closeListener();
     });
+
     this._socket.on("message", (data) => {
       try {
         const event = JSON.parse(data.toString());
-        if (typeof event.event !== "string") throw new Error();
+        if (typeof event.event !== "string") return;
         const listeners = this._listeners;
         for (let i = 0; i < listeners.length; i++) {
           if (listeners[i].event !== event.event) continue;
           listeners[i].listener(event.data);
         }
       } catch (e) {
-        console.log(e);
+        console.log('THE System recieved a message that is not JSON data, the message will be ignored')
         return;
       }
     });
