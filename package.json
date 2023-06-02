@@ -1,6 +1,6 @@
 {
   "name": "ts-transport",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "Transport for my real-time applications",
   "main": "./lib/index.js",
   "files": [
@@ -29,14 +29,14 @@
   "homepage": "https://github.com/garcia-s/ts-transport#readme",
   "dependencies": {
     "uuid": "^9.0.0",
-    "ws": "^8.11.0"
+    "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.2.4",
-    "@types/uuid": "^9.0.0",
-    "@types/ws": "^8.5.3",
-    "jest": "^29.3.1",
-    "ts-jest": "^29.0.3",
-    "typescript": "^4.9.4"
+    "@types/jest": "^29.5.2",
+    "@types/uuid": "^9.0.1",
+    "@types/ws": "^8.5.4",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.1.3"
   }
 }
